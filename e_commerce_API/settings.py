@@ -14,7 +14,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
+DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = ["your-app.onrender.com", "localhost", "127.0.0.1"]
 
@@ -71,11 +72,16 @@ WSGI_APPLICATION = "e_commerce_API.wsgi.application"
 
 
 # Database (Render DATABASE_URL)
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"), conn_max_age=600, ssl_require=True
+        default=config("DATABASE_URL"),  # decouple will read from .env locally
+        conn_max_age=600,
+        ssl_require=not DEBUG,  # force SSL on Render, not locally
     )
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
