@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from catalog.views import ProductViewSet, CategoryViewSet
-from users.views import UserViewSet, RegisterView, login_view
+from users.views import UserViewSet, RegisterView, LoginView
 from rest_framework.authtoken.views import obtain_auth_token
 from django.http import JsonResponse
 
@@ -22,5 +22,5 @@ urlpatterns = [
     path("api/", include(router.urls)),
     path("api/auth/token/", obtain_auth_token, name="api_token_auth"),
     path("api/auth/register/", RegisterView.as_view(), name="register"),
-    path("api/auth/login/", login_view, name="login"),
+    path("api/auth/login/", LoginView.as_view(), name="login"),
 ]
