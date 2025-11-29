@@ -1,0 +1,150 @@
+// Cart Manager
+class CartManager {
+    constructor() {
+        this.cartItems = this.loadCartFromStorage();
+        this.updateCartCount();
+    }
+
+    loadCartFromStorage() {
+        const cart = localStorage.getItem('cart');
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    saveCartToStorage() {
+        localStorage.setItem('cart', JSON.stringify(this.cartItems));
+    }
+
+    addToCart(productId, productName, price) {
+        const existingItem = this.cartItems.find(item => item.id === productId);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.cartItems.push({
+                id: productId,
+                name: productName,
+                price: parseFloat(price),
+                quantity: 1,
+            });
+        }
+
+        this.saveCartToStorage();
+        this.updateCartCount();
+        alert(`${productName} added to cart!`);
+    }
+
+    removeFromCart(productId) {
+        this.cartItems = this.cartItems.filter(item => item.id !== productId);
+        this.saveCartToStorage();
+        this.updateCartCount();
+        this.renderCart();
+    }
+
+    updateQuantity(productId, quantity) {
+        const item = this.cartItems.find(item => item.id === productId);
+        if (item) {
+            item.quantity = parseInt(quantity);
+            if (item.quantity <= 0) {
+                this.removeFromCart(productId);
+            } else {
+                this.saveCartToStorage();
+                this.renderCart();
+            }
+        }
+    }
+
+    updateCartCount() {
+        const totalItems = this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cartCount').textContent = totalItems;
+    }
+
+    getTotal() {
+        return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    }
+
+    showCart() {
+        this.renderCart();
+        document.getElementById('cartModal').style.display = 'block';
+    }
+
+    renderCart() {
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartTotalContainer = document.getElementById('cartTotal');
+
+        if (this.cartItems.length === 0) {
+            cartItemsContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--text-secondary);">Your cart is empty</p>';
+            cartTotalContainer.innerHTML = '';
+            return;
+        }
+
+        cartItemsContainer.innerHTML = this.cartItems.map(item => `
+            <div class="cart-item">
+                <div class="cart-item-image">🛍️</div>
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${item.name}</div>
+                    <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                    <div style="margin-top: 0.5rem;">
+                        <label style="font-size: 0.875rem; color: var(--text-secondary);">Quantity:</label>
+                        <input
+                            type="number"
+                            min="1"
+                            value="${item.quantity}"
+                            onchange="cartManager.updateQuantity(${item.id}, this.value)"
+                            style="width: 60px; margin-left: 0.5rem; padding: 0.25rem;"
+                        >
+                    </div>
+                </div>
+                <div style="margin-left: auto;">
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">$${(item.price * item.quantity).toFixed(2)}</div>
+                    <button class="btn btn-danger btn-sm" onclick="cartManager.removeFromCart(${item.id})">Remove</button>
+                </div>
+            </div>
+        `).join('');
+
+        cartTotalContainer.innerHTML = `
+            <div>Total: $${this.getTotal().toFixed(2)}</div>
+            <button class="btn btn-primary" style="margin-top: 1rem;" onclick="cartManager.checkout()">Proceed to Checkout</button>
+        `;
+    }
+
+    checkout() {
+        if (this.cartItems.length === 0) {
+            alert('Your cart is empty');
+            return;
+        }
+
+        if (!authManager.isAuthenticated()) {
+            alert('Please login to checkout');
+            document.getElementById('cartModal').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'block';
+            return;
+        }
+
+        // In a real application, this would process the order
+        alert(`Order placed successfully!\n\nTotal: $${this.getTotal().toFixed(2)}\n\nThank you for your purchase!`);
+
+        // Clear cart
+        this.cartItems = [];
+        this.saveCartToStorage();
+        this.updateCartCount();
+        document.getElementById('cartModal').style.display = 'none';
+    }
+
+    clearCart() {
+        if (confirm('Are you sure you want to clear your cart?')) {
+            this.cartItems = [];
+            this.saveCartToStorage();
+            this.updateCartCount();
+            this.renderCart();
+        }
+    }
+}
+
+// Create global cart manager instance
+const cartManager = new CartManager();
+window.cartManager = cartManager;
+
+// Event Listener for Cart Button
+document.getElementById('cartBtn').addEventListener('click', () => {
+    cartManager.showCart();
+});

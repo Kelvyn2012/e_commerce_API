@@ -1,59 +1,33 @@
-alembic==1.16.4
-asgiref==3.9.1
-attrs==25.3.0
-autobahn==24.4.2
-Automat==25.4.16
-blinker==1.9.0
-cffi==1.17.1
-channels==4.3.1
-channels_redis==4.3.0
-click==8.2.1
-constantly==23.10.4
-crispy-bootstrap5==2025.6
-cryptography==45.0.6
-daphne==4.2.1
-distlib==0.3.9
-dj-database-url==3.0.1
+# Core Django Framework
 Django==5.2.4
-django-crispy-forms==2.4
-django-csp==4.0
-django-filter==25.1
-django-taggit==6.1.0
+
+# Django REST Framework
 djangorestframework==3.16.0
-djangorestframework_simplejwt==5.5.1
-filelock==3.18.0
-greenlet==3.2.3
-gunicorn==23.0.0
-hyperlink==21.0.0
-idna==3.10
-incremental==24.7.2
-iniconfig==2.1.0
-itsdangerous==2.2.0
-Jinja2==3.1.6
-Mako==1.3.10
-MarkupSafe==3.0.2
-msgpack==1.1.1
-mysql-connector-python==9.3.0
-packaging==25.0
-pillow==11.3.0
-platformdirs==4.3.8
-pluggy==1.6.0
-psycopg2-binary==2.9.10
-pyasn1==0.6.1
-pyasn1_modules==0.4.2
-pycparser==2.22
-PyJWT==2.10.1
-PyMySQL==1.1.1
-pyOpenSSL==25.1.0
+
+# Authentication
+# Note: Using Token Authentication (rest_framework.authtoken)
+# If you want to use JWT instead, uncomment the line below and update your auth setup:
+# djangorestframework-simplejwt==5.5.1
+
+# Filtering and Search
+django-filter==25.1
+
+# Configuration Management
 python-decouple==3.8
-redis==6.4.0
-service-identity==24.2.0
-setuptools==80.9.0
-SQLAlchemy==2.0.41
-sqlparse==0.5.3
-Twisted==25.5.0
-txaio==25.6.1
-typing_extensions==4.14.1
-virtualenv==20.31.2
+
+# Database
+dj-database-url==3.0.1
+psycopg2-binary==2.9.10
+
+# Static Files
 whitenoise==6.9.0
-zope.interface==7.2
+
+# WSGI Server for Production
+gunicorn==23.0.0
+
+# CORS Headers (for frontend-backend communication)
+django-cors-headers==4.7.0
+
+# Optional: Image Processing (if you plan to handle product image uploads)
+# Uncomment if needed:
+# Pillow==11.3.0
