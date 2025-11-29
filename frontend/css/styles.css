@@ -225,6 +225,12 @@ body {
     font-weight: 600;
     position: relative;
     overflow: hidden;
+    z-index: 1;
+}
+
+.btn > * {
+    position: relative;
+    z-index: 1;
 }
 
 .btn::before {
@@ -238,11 +244,12 @@ body {
     background: rgba(255, 255, 255, 0.3);
     transform: translate(-50%, -50%);
     transition: width 0.6s, height 0.6s;
+    z-index: 0;
 }
 
 .btn:hover::before {
-    width: 300px;
-    height: 300px;
+    width: 150px;
+    height: 150px;
 }
 
 .btn-primary {
@@ -1029,22 +1036,73 @@ body {
 /* Quick View Badge */
 .quick-view-badge {
     position: absolute;
-    bottom: 1rem;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.625rem 1.25rem;
     border-radius: var(--radius-lg);
     font-size: 0.875rem;
+    font-weight: 600;
     opacity: 0;
-    transition: opacity var(--transition-base);
+    transition: all var(--transition-base);
     pointer-events: none;
     backdrop-filter: blur(10px);
+    white-space: nowrap;
+    z-index: 5;
 }
 
 .product-card:hover .quick-view-badge {
     opacity: 1;
+}
+
+/* Fade stock badge on hover to prevent visual clash with quick-view */
+.product-card:hover .stock-badge {
+    opacity: 0.4;
+    transform: scale(0.95);
+}
+
+/* Payment Methods */
+.payment-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.payment-method-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.payment-method-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    background: var(--bg-tertiary);
+}
+
+.payment-icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+}
+
+.payment-method-card h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.payment-method-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
 }
 
 /* Responsive Design */

@@ -107,7 +107,7 @@ class CartManager {
         `;
     }
 
-    checkout() {
+    async checkout() {
         if (this.cartItems.length === 0) {
             toastManager.info('Your cart is empty');
             return;
@@ -120,14 +120,47 @@ class CartManager {
             return;
         }
 
-        // In a real application, this would process the order
-        toastManager.info(`Order placed successfully!\n\nTotal: $${this.getTotal().toFixed(2)}\n\nThank you for your purchase!`);
-
-        // Clear cart
-        this.cartItems = [];
-        this.saveCartToStorage();
-        this.updateCartCount();
+        // Close cart modal
         document.getElementById('cartModal').style.display = 'none';
+
+        // Prepare order data
+        const orderData = {
+            items: this.cartItems,
+            total: this.getTotal(),
+            user: authManager.username,
+            timestamp: new Date().toISOString()
+        };
+
+        // Show payment method selector
+        paymentManager.showPaymentMethodSelector(orderData, (paymentResult) => {
+            if (paymentResult.success) {
+                // Payment successful
+                toastManager.success(`Payment successful! 🎉\n\nTransaction ID: ${paymentResult.transactionId}\nAmount: $${paymentResult.amount.toFixed(2)}\n\nThank you for your purchase!`);
+
+                // Save order to localStorage (in production, this would be saved to backend)
+                this.saveOrder({
+                    ...orderData,
+                    payment: paymentResult,
+                    orderId: 'ORD' + Date.now()
+                });
+
+                // Clear cart
+                this.cartItems = [];
+                this.saveCartToStorage();
+                this.updateCartCount();
+            }
+        });
+    }
+
+    saveOrder(order) {
+        try {
+            let orders = localStorage.getItem('orders');
+            orders = orders ? JSON.parse(orders) : [];
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+        } catch (error) {
+            console.error('Error saving order:', error);
+        }
     }
 
     clearCart() {

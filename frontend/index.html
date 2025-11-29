@@ -52,15 +52,15 @@
     <section class="filters">
         <div class="container">
             <div class="filter-group">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search products...">
-                <select id="categoryFilter" class="filter-select">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search products..." autocomplete="off" data-form-type="other">
+                <select id="categoryFilter" class="filter-select" autocomplete="off" data-form-type="other">
                     <option value="">All Categories</option>
                 </select>
                 <div class="price-filter">
-                    <input type="number" id="minPrice" placeholder="Min Price" class="price-input">
-                    <input type="number" id="maxPrice" placeholder="Max Price" class="price-input">
+                    <input type="number" id="minPrice" placeholder="Min Price" class="price-input" autocomplete="off" data-form-type="other">
+                    <input type="number" id="maxPrice" placeholder="Max Price" class="price-input" autocomplete="off" data-form-type="other">
                 </div>
-                <select id="sortBy" class="filter-select">
+                <select id="sortBy" class="filter-select" autocomplete="off" data-form-type="other">
                     <option value="-created_at">Newest First</option>
                     <option value="price">Price: Low to High</option>
                     <option value="-price">Price: High to Low</option>
@@ -196,6 +196,14 @@
         </div>
     </div>
 
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="paymentModalContent"></div>
+        </div>
+    </div>
+
     <!-- Floating Action Button (for authenticated users to add products) -->
     <button id="fabAddProduct" class="fab" style="display: none;" title="Add Product">
         <span>+</span>
@@ -205,6 +213,7 @@
     <script src="js/auth.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/toast.js"></script>
+    <script src="js/payment.js"></script>
     <script src="js/wishlist.js"></script>
     <script src="js/products.js"></script>
     <script src="js/cart.js"></script>
