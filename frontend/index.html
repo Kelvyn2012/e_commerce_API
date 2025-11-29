@@ -124,6 +124,19 @@
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" id="registerPassword" required>
+                    <div class="password-strength-container">
+                        <div class="password-strength-bar">
+                            <div id="passwordStrengthBar" class="password-strength-fill"></div>
+                        </div>
+                        <div id="passwordStrengthText" class="password-strength-text"></div>
+                    </div>
+                    <div class="password-requirements">
+                        <small id="passwordReq1" class="req-item">✗ At least 8 characters</small>
+                        <small id="passwordReq2" class="req-item">✗ Contains uppercase letter</small>
+                        <small id="passwordReq3" class="req-item">✗ Contains lowercase letter</small>
+                        <small id="passwordReq4" class="req-item">✗ Contains number</small>
+                        <small id="passwordReq5" class="req-item">✗ Contains special character</small>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Register</button>
                 <p class="error-message" id="registerError"></p>

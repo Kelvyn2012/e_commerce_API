@@ -106,6 +106,72 @@ document.getElementById('registerBtn').addEventListener('click', () => {
     document.getElementById('registerModal').style.display = 'block';
 });
 
+// Password Strength Checker
+function checkPasswordStrength(password) {
+    let strength = 0;
+    const requirements = {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[^A-Za-z0-9]/.test(password)
+    };
+
+    // Count met requirements
+    Object.values(requirements).forEach(met => {
+        if (met) strength++;
+    });
+
+    // Determine strength level
+    let level = '';
+    if (strength === 0) level = '';
+    else if (strength <= 2) level = 'weak';
+    else if (strength === 3) level = 'fair';
+    else if (strength === 4) level = 'good';
+    else level = 'strong';
+
+    return { level, requirements, strength };
+}
+
+// Update password strength UI
+function updatePasswordStrength(password) {
+    const strengthBar = document.getElementById('passwordStrengthBar');
+    const strengthText = document.getElementById('passwordStrengthText');
+    const { level, requirements } = checkPasswordStrength(password);
+
+    // Remove all classes
+    strengthBar.className = 'password-strength-fill';
+    strengthText.className = 'password-strength-text';
+
+    // Add strength class
+    if (level) {
+        strengthBar.classList.add(level);
+        strengthText.classList.add(level);
+        strengthText.textContent = level.charAt(0).toUpperCase() + level.slice(1) + ' Password';
+    } else {
+        strengthText.textContent = '';
+    }
+
+    // Update requirements
+    document.getElementById('passwordReq1').className = requirements.length ? 'req-item met' : 'req-item';
+    document.getElementById('passwordReq2').className = requirements.uppercase ? 'req-item met' : 'req-item';
+    document.getElementById('passwordReq3').className = requirements.lowercase ? 'req-item met' : 'req-item';
+    document.getElementById('passwordReq4').className = requirements.number ? 'req-item met' : 'req-item';
+    document.getElementById('passwordReq5').className = requirements.special ? 'req-item met' : 'req-item';
+
+    // Update requirement text
+    document.getElementById('passwordReq1').textContent = (requirements.length ? '✓' : '✗') + ' At least 8 characters';
+    document.getElementById('passwordReq2').textContent = (requirements.uppercase ? '✓' : '✗') + ' Contains uppercase letter';
+    document.getElementById('passwordReq3').textContent = (requirements.lowercase ? '✓' : '✗') + ' Contains lowercase letter';
+    document.getElementById('passwordReq4').textContent = (requirements.number ? '✓' : '✗') + ' Contains number';
+    document.getElementById('passwordReq5').textContent = (requirements.special ? '✓' : '✗') + ' Contains special character';
+}
+
+// Add password strength checker on input
+document.getElementById('registerPassword').addEventListener('input', (e) => {
+    updatePasswordStrength(e.target.value);
+});
+
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('registerUsername').value;
@@ -113,11 +179,22 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     const password = document.getElementById('registerPassword').value;
     const errorEl = document.getElementById('registerError');
 
+    // Check password strength
+    const { level } = checkPasswordStrength(password);
+    if (!level || level === 'weak') {
+        errorEl.textContent = 'Please choose a stronger password';
+        toastManager.warning('Password is too weak. Please meet all requirements.');
+        return;
+    }
+
     try {
         await authManager.register(username, email, password);
         document.getElementById('registerModal').style.display = 'none';
         document.getElementById('registerForm').reset();
         errorEl.textContent = '';
+
+        // Reset password strength UI
+        updatePasswordStrength('');
 
         // Show success message
         toastManager.success('Registration successful! You are now logged in.');
