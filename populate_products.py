@@ -1,8 +1,17 @@
+"""
+Django script to populate Product and Category models with sample data.
+
+Usage:
+    python manage.py shell < populate_products.py
+
+    Or place in a Django management command:
+    python manage.py populate_products
+"""
+
 from django.contrib.auth import get_user_model
 from decimal import Decimal
 
 # Import your models (adjust the import path to match your app structure)
-# Replace 'your_app' with your actual app name (e.g., 'products', 'store', 'shop')
 from catalog.models import Category, Product
 
 User = get_user_model()
@@ -44,7 +53,7 @@ def create_products(owner):
             "price": Decimal("79.99"),
             "category": categories["Electronics"],
             "stock_quantity": 50,
-            "image_url": "https://example.com/images/headphones.jpg",
+            "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
         },
         {
             "name": "Cotton T-Shirt",
@@ -52,7 +61,7 @@ def create_products(owner):
             "price": Decimal("19.99"),
             "category": categories["Clothing"],
             "stock_quantity": 200,
-            "image_url": "https://example.com/images/tshirt.jpg",
+            "image_url": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
         },
         {
             "name": "Python Programming Guide",
@@ -60,7 +69,7 @@ def create_products(owner):
             "price": Decimal("34.99"),
             "category": categories["Books"],
             "stock_quantity": 75,
-            "image_url": "https://example.com/images/python-book.jpg",
+            "image_url": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
         },
         {
             "name": "Indoor Plant Pot Set",
@@ -68,7 +77,7 @@ def create_products(owner):
             "price": Decimal("24.99"),
             "category": categories["Home & Garden"],
             "stock_quantity": 40,
-            "image_url": "https://example.com/images/plant-pots.jpg",
+            "image_url": "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400",
         },
         {
             "name": "Yoga Mat",
@@ -76,7 +85,7 @@ def create_products(owner):
             "price": Decimal("29.99"),
             "category": categories["Sports & Outdoors"],
             "stock_quantity": 100,
-            "image_url": "https://example.com/images/yoga-mat.jpg",
+            "image_url": "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400",
         },
         {
             "name": "Building Blocks Set",
@@ -84,7 +93,7 @@ def create_products(owner):
             "price": Decimal("39.99"),
             "category": categories["Toys & Games"],
             "stock_quantity": 60,
-            "image_url": "https://example.com/images/blocks.jpg",
+            "image_url": "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400",
         },
         {
             "name": "Organic Coffee Beans",
@@ -92,7 +101,7 @@ def create_products(owner):
             "price": Decimal("14.99"),
             "category": categories["Food & Beverages"],
             "stock_quantity": 150,
-            "image_url": "https://example.com/images/coffee.jpg",
+            "image_url": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400",
         },
         {
             "name": "Natural Face Moisturizer",
@@ -100,7 +109,7 @@ def create_products(owner):
             "price": Decimal("26.99"),
             "category": categories["Beauty & Personal Care"],
             "stock_quantity": 80,
-            "image_url": "https://example.com/images/moisturizer.jpg",
+            "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400",
         },
         {
             "name": "Laptop Stand",
@@ -108,7 +117,7 @@ def create_products(owner):
             "price": Decimal("44.99"),
             "category": categories["Electronics"],
             "stock_quantity": 35,
-            "image_url": "https://example.com/images/laptop-stand.jpg",
+            "image_url": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400",
         },
         {
             "name": "Running Shoes",
@@ -116,7 +125,7 @@ def create_products(owner):
             "price": Decimal("89.99"),
             "category": categories["Sports & Outdoors"],
             "stock_quantity": 45,
-            "image_url": "https://example.com/images/running-shoes.jpg",
+            "image_url": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
         },
     ]
 
