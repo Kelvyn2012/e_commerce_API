@@ -1,21 +1,8 @@
-"""
-Django script to populate Product and Category models with sample data.
-
-Usage:
-    python manage.py shell < populate_products.py
-
-    Or place in a Django management command:
-    python manage.py populate_products
-"""
-
-# Setup Django environment (uncomment if running as standalone script)
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project.settings')
-# django.setup()
-
 from django.contrib.auth import get_user_model
 from decimal import Decimal
 
 # Import your models (adjust the import path to match your app structure)
+# Replace 'your_app' with your actual app name (e.g., 'products', 'store', 'shop')
 from catalog.models import Category, Product
 
 User = get_user_model()
