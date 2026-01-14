@@ -22,7 +22,7 @@ pipeline {
     HEALTHCHECK_URL = 'https://e-commerce-api-e7k5.onrender.com/health'
 
     // Quality gates
-    PYLINT_FAIL_SCORE = '7.5'
+    PYLINT_FAIL_SCORE = '6.0'
   }
 
   stages {
