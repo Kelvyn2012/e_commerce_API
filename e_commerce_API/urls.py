@@ -6,6 +6,12 @@ from users.views import UserViewSet, RegisterView, LoginView, LogoutView
 from rest_framework.authtoken.views import obtain_auth_token
 from django.http import JsonResponse
 
+
+# Define a simple function to return JSON OK
+def health_check(request):
+    return JsonResponse({"status": "ok"})
+
+
 router = DefaultRouter()
 router.register(r"users", UserViewSet, basename="user")
 router.register(r"categories", CategoryViewSet, basename="category")
@@ -54,6 +60,7 @@ def home(request):
 
 urlpatterns = [
     path("", home),
+    path("health", health_check),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
     path("api/auth/token/", obtain_auth_token, name="api_token_auth"),
