@@ -64,16 +64,19 @@ class OrderItemSerializer(serializers.ModelSerializer):
         product = data.get("product")
         quantity = data.get("quantity")
 
+        if product is None or quantity is None:
+            return data
+
+        if quantity <= 0:
+            raise serializers.ValidationError(
+                {"quantity": "Quantity must be greater than 0."}
+            )
+
         if quantity > product.stock_quantity:
             raise serializers.ValidationError(
                 {
                     "quantity": f"Only {product.stock_quantity} units available for {product.name}."
                 }
-            )
-
-        if quantity <= 0:
-            raise serializers.ValidationError(
-                {"quantity": "Quantity must be greater than 0."}
             )
 
         return data
