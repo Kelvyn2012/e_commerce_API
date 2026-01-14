@@ -16,8 +16,7 @@ pipeline {
 
     IMAGE_NAME = 'kelvyn2012/e_commerce_api'
     REPORT_DIR = 'reports'
-    PYTHON_VERSION = '3.10'
-
+    
     // Render
     RENDER_DEPLOY_HOOK = credentials('render-deploy-hook')
     HEALTHCHECK_URL = 'https://e-commerce-api-e7k5.onrender.com/health'
@@ -59,8 +58,9 @@ pipeline {
     stage('Build Docker image') {
       steps {
         script {
+          // Added --no-cache to ensure we aren't using an old empty layer
           sh """
-            docker build \
+            docker build --no-cache \
               -t ${IMAGE_NAME}:${params.BRANCH}-${BUILD_NUMBER} \
               -t ${IMAGE_NAME}:${env.GIT_COMMIT_SHORT} \
               ${params.BRANCH == 'main' ? "-t ${IMAGE_NAME}:latest" : ""} \
@@ -72,10 +72,13 @@ pipeline {
 
     stage('Run tests') {
       steps {
+        // 1. Removed -v mount (uses code inside image)
+        // 2. Added SECRET_KEY env var
+        // 3. Added container name 'test-container' to copy reports out later
         sh """
-          docker run --rm \
-            -v \$(pwd):/app \
-            -w /app \
+          docker run --name test-container-${BUILD_NUMBER} \
+            -e SECRET_KEY='django-insecure-test-key' \
+            -e DEBUG=True \
             ${IMAGE_NAME}:${params.BRANCH}-${BUILD_NUMBER} \
             sh -c '
               pip install pytest pytest-cov &&
@@ -86,6 +89,12 @@ pipeline {
                 --cov-report=term-missing
             '
         """
+        
+        // Extract the test report from the container back to Jenkins workspace
+        sh "docker cp test-container-${BUILD_NUMBER}:/app/${REPORT_DIR} . || true"
+        
+        // Cleanup the container
+        sh "docker rm test-container-${BUILD_NUMBER}"
       }
     }
 
@@ -93,8 +102,7 @@ pipeline {
       steps {
         sh """
           docker run --rm \
-            -v \$(pwd):/app \
-            -w /app \
+            -e SECRET_KEY='django-insecure-test-key' \
             ${IMAGE_NAME}:${params.BRANCH}-${BUILD_NUMBER} \
             sh -c '
               pip install pylint &&
@@ -134,6 +142,7 @@ pipeline {
             -H "Accept: application/json" \
             "${RENDER_DEPLOY_HOOK}"
         """
+        echo "Waiting for deployment to propagate..."
         sleep 30
       }
     }
