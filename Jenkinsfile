@@ -122,9 +122,11 @@ pipeline {
           usernameVariable: 'DOCKER_USERNAME',
           passwordVariable: 'DOCKER_PASSWORD'
         )]) {
+          // FIX: Use standard shell variables ($BRANCH, $BUILD_NUMBER) 
+          // instead of Groovy syntax inside single quotes.
           sh '''
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-            docker push ${IMAGE_NAME}:${params.BRANCH}-${BUILD_NUMBER}
+            docker push ${IMAGE_NAME}:${BRANCH}-${BUILD_NUMBER}
             docker push ${IMAGE_NAME}:${GIT_COMMIT_SHORT}
             docker push ${IMAGE_NAME}:latest
           '''
