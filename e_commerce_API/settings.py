@@ -136,9 +136,19 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:8080",
+    "http://localhost:8081",
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:8081",
 ]
 # CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = ["https://e-commerce-api-e7k5.onrender.com"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://e-commerce-api-e7k5.onrender.com",
+    "http://localhost:8080",
+    "http://localhost:8081",
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:8081",
+]
 # Allow all Vercel preview deployments automatically
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.vercel\.app$",  # Matches all *.vercel.app domains
